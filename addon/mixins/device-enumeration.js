@@ -38,7 +38,7 @@ export default Mixin.create({
     const PC = window.RTCPeerConnection;
     const gUM = window.navigator && window.navigator.mediaDevices && window.navigator.mediaDevices.getUserMedia;
     const supportWebAudio = window.AudioContext && window.AudioContext.prototype.createMediaStreamSource;
-    const support = !!(PC && gUM && supportWebAudio);
+    const support = !!(PC && gUM && (supportWebAudio || window.RTCRtpTransceiver));
 
     return support;
   }),
