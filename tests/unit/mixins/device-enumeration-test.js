@@ -173,6 +173,14 @@ test('audioCallCapable should be true if all properties exists', assert => {
   assert.equal(subject.get('audioCallCapable'), true);
 });
 
+test('audioCallCapable will be true even if window audio context is not', assert => {
+  // Mock out needed properties in window object
+  setWindowPropertiesForCallCapable();
+  window.AudioContext = undefined;
+  window.RTCRtpTransceiver = () => {};
+  assert.equal(subject.get('audioCallCapable'), true);
+});
+
 test('videoCallCapable should be true if all audioCallCapable is true and other props for videoCallCapable', assert => {
   subject.set('audioCallCapable', true);
   const video = document.createElement('video');

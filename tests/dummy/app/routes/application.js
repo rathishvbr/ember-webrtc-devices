@@ -10,6 +10,7 @@ export default Ember.Route.extend({
         video: true
       }).then((stream) => {
         stream.getTracks().forEach((t) => t.stop());
+        this.get('webrtc').enumerateDevices();
       });
     });
     return this.get('intl').setLocale('en-us');

@@ -14,7 +14,7 @@ export default Ember.Service.extend(DeviceEnumerationMixin, {
     return intl.formatHtmlMessage(intl.findTranslationByKey(key), hash);
   },
 
-  init() {
+  init () {
     this._super(...arguments);
     window.webrtcService = this;
   }
