@@ -1,6 +1,6 @@
 {
   "name": "ember-webrtc-devices",
-  "version": "5.5.0",
+  "version": "6.0.0",
   "description": "Enumerating and selecting media devices from the browser as an ember addon",
   "directories": {
     "doc": "doc",
