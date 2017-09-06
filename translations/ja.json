@@ -23,6 +23,7 @@
         "microphoneLabel": "マイク {number}",
         "outputDeviceLabel": "スピーカー {number}",
         "outputDeviceSystemDefault": "システムのデフォルト",
-        "default": "デフォルト"
+        "default": "デフォルト",
+        "windowsCommunication": "Windows 通信デバイス"
     }
 }

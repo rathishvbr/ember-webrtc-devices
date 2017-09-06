@@ -23,6 +23,7 @@
         "microphoneLabel": "Mikrofon {number}",
         "outputDeviceLabel": "Högtalare {number}",
         "outputDeviceSystemDefault": "Systemstandard",
-        "default": "Standard"
+        "default": "Standard",
+        "windowsCommunication": "Kommunikationsenhet för Windows"
     }
 }

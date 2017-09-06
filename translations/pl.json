@@ -23,6 +23,7 @@
         "microphoneLabel": "Mikrofon {number}",
         "outputDeviceLabel": "Głośnik {number}",
         "outputDeviceSystemDefault": "Domyślne ustawienie systemowe",
-        "default": "Domyślne"
+        "default": "Domyślne",
+        "windowsCommunication": "Urządzenie komunikacyjne z systemem Windows"
     }
 }

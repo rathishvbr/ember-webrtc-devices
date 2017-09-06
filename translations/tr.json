@@ -23,6 +23,7 @@
         "microphoneLabel": "Mikrofon {number}",
         "outputDeviceLabel": "Hoparlör {number}",
         "outputDeviceSystemDefault": "Sistem varsayılanı",
-        "default": "Varsayılan"
+        "default": "Varsayılan",
+        "windowsCommunication": "Windows İletişim Aygıtı"
     }
 }

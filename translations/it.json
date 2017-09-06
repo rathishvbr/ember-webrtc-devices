@@ -23,6 +23,7 @@
         "microphoneLabel": "Microfono {number}",
         "outputDeviceLabel": "Altoparlante {number}",
         "outputDeviceSystemDefault": "Valori predefiniti del sistema",
-        "default": "Predefinito"
+        "default": "Predefinito",
+        "windowsCommunication": "Dispositivo di comunicazione Windows"
     }
 }

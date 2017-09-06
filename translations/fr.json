@@ -23,6 +23,7 @@
         "microphoneLabel": "Microphone {number}",
         "outputDeviceLabel": "Haut-parleur {number}",
         "outputDeviceSystemDefault": "Paramètres système par défaut",
-        "default": "Par défaut"
+        "default": "Par défaut",
+        "windowsCommunication": "Périphérique de communication Windows"
     }
 }
