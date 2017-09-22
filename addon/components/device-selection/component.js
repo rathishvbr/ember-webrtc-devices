@@ -4,7 +4,7 @@
 import Ember from 'ember';
 import layout from './template';
 
-const {computed, Component, inject, run} = Ember;
+const { computed, Component, inject, run } = Ember;
 
 export default Component.extend(/* LoggerMixin, */{
   layout: layout,
@@ -77,7 +77,6 @@ export default Component.extend(/* LoggerMixin, */{
 
   showOutputDevicePicker: computed.and('outputDevice', 'audio'),
   showResolutionPicker: computed.and('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'resolution'),
-
 
   actions: {
     openTroubleshoot () {

@@ -1,4 +1,4 @@
-/* global QUnit, fillIn */
+/* global QUnit */
 
 import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
@@ -86,5 +86,5 @@ test('it should start with default profile selected', function (assert) {
   // Set any properties with this.set('myProperty', 'value')
   // Handle any actions with this.on('myAction', function(val) { ... });"
   this.renderDefault();
-  assert.equal(this.$('.btn-toggle div').text(), this.get('intl').t('webrtcDevices.useComputerSettings'))
+  assert.equal(this.$('.btn-toggle div').text(), this.get('intl').t('webrtcDevices.useComputerSettings'));
 });
