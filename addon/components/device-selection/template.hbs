@@ -110,11 +110,6 @@
                     </span>
                     <i class="pc pc-speakers" title="{{t "webrtcDevices.outputSelect"}}"></i>
                 </label>
-                <audio class="hide preview-audio">
-                    <source src="{{applicationService.urlprefix}}assets/sounds/phone-ringtone.mp3" type="audio/mpeg">
-                    <source src="{{applicationService.urlprefix}}assets/sounds/phone-ringtone.aac" type="audio/mp4">
-                    <source src="{{applicationService.urlprefix}}assets/sounds/phone-ringtone.ogg" type="audio/ogg">
-                </audio>
             </div>
             <div class="entry-values">
                 {{#if webrtc.outputDeviceList.length}}
@@ -131,14 +126,6 @@
                   <span class="system-default-message">{{t "webrtcDevices.outputDeviceSystemDefault"}}</span>
                 {{/if}}
             </div>
-        </div>
-        <div class= "entry-row audio-text">
-            <a href="#" class="btn btn-link play-sound-btn" {{action "playTestSound"}} title="{{t "webrtcDevices.audioDestinationTooltip"}}">
-                <svg class="svg-icon"><use xlink:href="#icon-play"></use></svg>
-                <span class="preview-audio-text">
-                    {{t "webrtcDevices.playAudio"}}
-                </span>
-            </a>
         </div>
     {{/if}}
     {{#if showTroubleshoot}}
