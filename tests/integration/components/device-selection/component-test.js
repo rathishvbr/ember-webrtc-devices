@@ -27,8 +27,8 @@ const webrtcService = Ember.Service.extend({
   outputDeviceList: Ember.A(),
   resolutionList: Ember.A(),
   setOutputDevice: function () { return Ember.RSVP.resolve(); },
-  enumerateDevices() { },
-  enumerateResolutions() { }
+  enumerateDevices () { },
+  enumerateResolutions () { }
 });
 
 const mockDevices = [

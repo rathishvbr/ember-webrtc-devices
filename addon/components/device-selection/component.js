@@ -4,7 +4,7 @@
 import Ember from 'ember';
 import layout from './template';
 
-const {computed, RSVP, Component, inject, run} = Ember;
+const {computed, Component, inject, run} = Ember;
 
 export default Component.extend(/* LoggerMixin, */{
   layout: layout,
@@ -26,7 +26,7 @@ export default Component.extend(/* LoggerMixin, */{
   videoCallCapable: computed.reads('webrtc.videoCallCapable'),
 
   // TODO: remove this when we can get an event from intl about translations being loaded
-  init() {
+  init () {
     this._super(...arguments);
 
     this.get('webrtc').enumerateDevices();
@@ -77,36 +77,6 @@ export default Component.extend(/* LoggerMixin, */{
       if (typeof this.attrs.openTroubleshoot === 'function') {
         this.attrs.openTroubleshoot();
       }
-    },
-
-    playTestSound () {
-      const audio = this.$('.preview-audio')[0];
-
-      const outputDevice = this.get('selectedOutputDevice');
-
-      if (!audio) {
-        return;
-      }
-
-      if (!audio.play) {
-        return console.warn('Audio playback not supported');
-      }
-
-      audio.muted = true;
-      audio.currentTime = 0;
-      const playPromise = audio.play() || RSVP.resolve();
-      playPromise.then(() => {
-        if (outputDevice) {
-          return this.get('webrtc').setOutputDevice(audio, outputDevice);
-        }
-        return Promise.resolve();
-      }).then(() => {
-        return audio.pause() || RSVP.resolve();
-      }).then(() => {
-        audio.muted = false;
-        audio.currentTime = 0;
-        audio.play();
-      });
     },
 
     changeCamera (id) {
