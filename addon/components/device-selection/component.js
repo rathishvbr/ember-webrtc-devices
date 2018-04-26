@@ -19,8 +19,8 @@ export default Component.extend(/* LoggerMixin, */{
   audio: true,
   video: true,
   troubleshoot: true,
-  hideOutputDevice: false,
-  hideResolution: false,
+  outputDevice: true,
+  resolution: true,
 
   webrtc: inject.service(),
 
@@ -74,13 +74,13 @@ export default Component.extend(/* LoggerMixin, */{
     return this.get('troubleshoot') && typeof this.attrs.openTroubleshoot === 'function';
   }),
 
-  showResolutionPicker: computed('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'hideResolution', function () {
+  showResolutionPicker: computed('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'resolution', function () {
     const webrtc = this.get('webrtc');
-    return webrtc.get('resolutionList.length') && webrtc.get('cameraList.length') && this.get('video') && !this.get('hideResolution');
+    return webrtc.get('resolutionList.length') && webrtc.get('cameraList.length') && this.get('video') && !this.get('resolution');
   }),
 
-  showOutputDevicePicker: computed('hideOutputDevice', 'audio', function () {
-    return !this.get('hideOutputDevice') && this.get('audio');
+  showOutputDevicePicker: computed('outputDevice', 'audio', function () {
+    return !this.get('outputDevice') && this.get('audio');
   }),
 
   actions: {
