@@ -76,11 +76,11 @@ export default Component.extend(/* LoggerMixin, */{
 
   showResolutionPicker: computed('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'resolution', function () {
     const webrtc = this.get('webrtc');
-    return webrtc.get('resolutionList.length') && webrtc.get('cameraList.length') && this.get('video') && !this.get('resolution');
+    return webrtc.get('resolutionList.length') && webrtc.get('cameraList.length') && this.get('video') && this.get('resolution');
   }),
 
   showOutputDevicePicker: computed('outputDevice', 'audio', function () {
-    return !this.get('outputDevice') && this.get('audio');
+    return this.get('outputDevice') && this.get('audio');
   }),
 
   actions: {
