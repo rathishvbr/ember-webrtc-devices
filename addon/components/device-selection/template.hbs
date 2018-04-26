@@ -73,7 +73,7 @@
                 </div>
             </div>
         {{/if}}
-        {{#if (and webrtc.resolutionList.length (and webrtc.cameraList.length video))}}
+        {{#if showResolutionPicker}}
             <div class="entry-row">
                 <div class="entry-label">
                     <label for="{{concat elementId '-resolution-select'}}">
@@ -101,7 +101,7 @@
             {{t "webrtcDevices.browserMediaSettings"}}
         </div>
     {{/if}}
-    {{#if audio}}
+    {{#if showOutputDevicePicker}}
         <div class="entry-row">
             <div class="entry-label audio-selection">
                 <label for="{{concat elementId '-outputDevice-select'}}">
