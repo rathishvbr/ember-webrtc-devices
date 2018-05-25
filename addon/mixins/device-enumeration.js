@@ -14,7 +14,7 @@ if (IS_CHROME) {
   BROWSER_VERSION = parseInt(UA.match(/firefox\/([0-9]+)\./)[1], 10);
 }
 
-export default Mixin.create({
+export default Mixin.create(Ember.Evented, {
   // options
   fullHd: false,
 
@@ -252,6 +252,8 @@ export default Mixin.create({
         microphoneList: Ember.A(microphones),
         outputDeviceList: Ember.A(outputDevices)
       });
+
+      this.trigger('deviceListsUpdated');
     }).catch(err => {
       if (!this.get('isDestroyed') && !this.get('isDestroying')) {
         Ember.Logger.error(err);
