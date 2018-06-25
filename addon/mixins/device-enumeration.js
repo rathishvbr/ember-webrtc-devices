@@ -233,7 +233,8 @@ export default Mixin.create(Ember.Evented, {
         devices.forEach((device) => {
           const deviceInfo = {
             deviceId: device.deviceId,
-            label: device.label
+            label: device.label,
+            groupId: (device.deviceId && device.deviceId.toLowerCase() === 'default') ? null : device.groupId
           };
           const hasLabel = !_.isEmpty(device.label);
 
