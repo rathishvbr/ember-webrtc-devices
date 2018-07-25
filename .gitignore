@@ -27,3 +27,4 @@ testem.log
 /.vscode
 .idea
 .DS_Store
+.nyc_output
