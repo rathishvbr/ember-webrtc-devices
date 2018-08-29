@@ -16,3 +16,175 @@ select {
   width: 300px;
   margin-bottom: 10px;
 }
+
+.dropdown-menu-view ul:not(.show) {
+  display: none;
+}
+
+.dropdown-menu-view {
+  font-size: 13px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.dropdown-menu-view  > button {
+  text-align: left;
+  position: relative;
+  width: 100%;
+  font-size: 13px;
+  line-height: 20px;
+  padding-right: 20px;
+}
+
+.ion-arrow-down-b {
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid black;
+}
+
+.ion-arrow-up-b {
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid black;
+}
+
+.dropdown-menu-view  > button i {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  line-height: 20px;
+}
+
+.dropdown-menu-view  > button div {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+  
+.dropdown-menu-view .dropdown-menu {
+  width: 100%;
+  margin: 4px 0;
+  padding: 4px 0px;
+  list-style: none;
+  box-sizing: border-box;
+  border: 1px solid #CACACA;
+}
+.dropdown-menu-view .dropdown-menu > li, .dropdown-menu-view .dropdown-menu > div {
+  position: relative;
+}
+
+.dropdown-menu-view .dropdown-menu > li:hover, .dropdown-menu-view .dropdown-menu > div:hover {
+  cursor: pointer;
+}
+.dropdown-menu-view .dropdown-menu > li.divider, .dropdown-menu-view .dropdown-menu > div.divider {
+  border: 1px solid #CACACA;
+  border-bottom: 0;
+  margin: 5px;
+  padding: 0;
+}
+.dropdown-menu-view .dropdown-menu > li a, .dropdown-menu-view .dropdown-menu > div a, .dropdown-menu-view .dropdown-menu > li span.link, .dropdown-menu-view .dropdown-menu > div span.link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  padding: 0 24px;
+  clear: both;
+  line-height: 32px;
+}
+.dropdown-menu-view .dropdown-menu > li a:focus, .dropdown-menu-view .dropdown-menu > div a:focus,
+.dropdown-menu-view .dropdown-menu > li a:hover, .dropdown-menu-view .dropdown-menu > div a:hover {
+  background-color: #2e69db;
+  color: #FDFDFD;
+}
+
+.profile-selection > .entry-row {
+  display: flex;
+}
+.profile-selection > .entry-row > .entry-label{
+  display: none;
+}
+
+.profile-selection > .entry-row > .entry-values {
+  flex-grow: 1;
+}
+.profile-selection > .entry-row .sr-only {
+  display: none;
+}
+.profile-selection > .entry-row .entry-action button{
+  height: 26px;
+  width: 30px;
+  margin-left: -1px;
+  cursor: pointer;
+}
+.pc-edit {
+  color: #000;
+  position: absolute;
+  margin-left: -4px;
+  margin-top: -3px;
+  width: 13px;
+  height: 2px;
+  border-radius: 1px;
+  border: solid 1px currentColor;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+
+.pc-edit:before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: -1px;
+  width: 0px;
+  height: 0px;
+  border-left: solid 5px transparent;
+  border-right: solid 5px currentColor;
+  border-top: solid 2px transparent;
+  border-bottom: solid 2px transparent;
+}
+
+.dropdown-menu-view .dropdown-menu > li a:focus i.pc-remove-item, .dropdown-menu-view .dropdown-menu > div a:focus i.pc-remove-item,
+.dropdown-menu-view .dropdown-menu > li a:hover i.pc-remove-item, .dropdown-menu-view .dropdown-menu > div a:hover i.pc-remove-item {
+  color: #FDFDFD;
+}
+
+.right-btn {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 24px;
+  height: 100%;
+  text-align: center;
+  background: none;
+  border: none;
+}
+
+.pc-remove-item {
+  color: #000;
+  position: absolute;
+  right: 19px;
+}
+
+.pc-remove-item:before {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 1px;
+  background-color: currentColor;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+
+.pc-remove-item:after {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 1px;
+  background-color: currentColor;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+

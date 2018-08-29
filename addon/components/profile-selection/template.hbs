@@ -1,0 +1,162 @@
+
+{{#if showEditPart}}
+    <div class='device-selection'>
+        {{#if webrtc.canListDevices}}
+            {{input placeholder=profileNameLabel value=selectedProfile.name id=(concat elementId '-profile-input') classNames="form-control"}}
+            {{#if (and webrtc.microphoneList.length audio)}}
+                <div class="entry-row">
+                    <div class="entry-label">
+                        <label for="{{concat elementId '-microphone-select'}}">
+                            <span class="sr-only">
+                                {{t "webrtcDevices.audioSource"}}
+                            </span>
+                            <i class="pc-moon pc-microphone" title="{{t "webrtcDevices.microphoneSelect"}}"></i>
+                        </label>
+                    </div>
+                    <div class="entry-values">
+                        {{#if webrtc.hasMicrophone}}
+                            {{#x-select
+                            id=(concat elementId '-microphone-select')
+                            value=selectedMicrophoneId
+                            action="changeMicrophone"
+                            one-way=true
+                            class="form-control microphone-select"}}
+                                {{#each webrtc.microphoneList as |microphone|}}
+                                    {{#x-option value=microphone.deviceId}}{{microphone.label}}{{/x-option}}
+                                {{/each}}
+                            {{/x-select}}
+                        {{else}}
+                            <span>{{t "webrtcDevices.noMicrophoneDetected"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/if}}
+            {{#if showOutputDevicePicker}}
+                <div class="entry-row">
+                    <div class="entry-label audio-selection">
+                        <label for="{{concat elementId '-outputDevice-select'}}">
+                            <span class="sr-only">
+                                {{t "webrtcDevices.audioDestination"}}
+                            </span>
+                            <i class="pc pc-speakers" title="{{t "webrtcDevices.outputSelect"}}"></i>
+                        </label>
+                    </div>
+                    <div class="entry-values">
+                        {{#if webrtc.outputDeviceList.length}}
+                            {{#x-select
+                            id=(concat elementId '-speakers-select')
+                            value=selectedOutputDeviceId
+                            action="changeOutputDevice"
+                            one-way=true
+                            class="form-control speakers-select"}}
+                                {{#each webrtc.outputDeviceList as |outputDevice|}}
+                                    {{#x-option value=outputDevice.deviceId}}{{outputDevice.label}}{{/x-option}}
+                                {{/each}}
+                            {{/x-select}}
+                        {{else}}
+                            <span class="system-default-message">{{t "webrtcDevices.outputDeviceSystemDefault"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/if}}
+            {{#if (and webrtc.cameraList.length video)}}
+                <div class="entry-row">
+                    <div class="entry-label">
+                        <label for="{{concat elementId '-camera-select'}}">
+                            <span class="sr-only">
+                                {{t "webrtcDevices.videoSource"}}
+                            </span>
+                            <i class="pc-moon pc-video" title="{{t "webrtcDevices.cameraSelect"}}"></i>
+                        </label>
+                    </div>
+                    <div class="entry-values">
+                        {{#if webrtc.hasCamera}}
+                            {{#x-select id=(concat elementId '-camera-select')
+                            value=selectedCameraId
+                            action="changeCamera"
+                            one-way=true
+                            class="form-control camera-select"}}
+                                {{#each webrtc.cameraList as |camera|}}
+                                    {{#x-option value=camera.deviceId}}{{camera.label}}{{/x-option}}
+                                {{/each}}
+                            {{/x-select}}
+                        {{else}}
+                            <span>{{t "webrtcDevices.noCameraDetected"}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/if}}
+            {{#if showResolutionPicker}}
+                <div class="entry-row">
+                    <div class="entry-label">
+                        <label for="{{concat elementId '-resolution-select'}}">
+                            <span class="sr-only">
+                                {{t "webrtcDevices.resolution"}}
+                            </span>
+                            <i class="pc pc-signal" title="{{t "webrtcDevices.resolutionSelect"}}"></i>
+                        </label>
+                    </div>
+                    <div class="entry-values">
+                        {{#x-select
+                        id=(concat elementId '-resolution-select')
+                        value=selectedResolutionId
+                        action="changeResolution"
+                        one-way=true
+                        class="form-control resolution-select"}}
+                            {{#each webrtc.resolutionList as |resolution|}}
+                                {{#x-option value=resolution.presetId}}{{resolution.label}}{{/x-option}}
+                            {{/each}}
+                        {{/x-select}}
+                    </div>
+                </div>
+            {{/if}}
+            <button {{action "saveProfileEdition"}} title="{{t "webrtcDevices.saveLabel"}}">
+                {{t "webrtcDevices.saveLabel"}}
+            </button>
+            <button {{action "cancelProfileEdition"}} title="{{t "webrtcDevices.cancelLabel"}}">
+                {{t "webrtcDevices.cancelLabel"}}
+            </button>
+        {{else}}
+            <div class="browser-settings-message">
+                {{t "webrtcDevices.browserMediaSettings"}}
+            </div>
+        {{/if}}
+    </div>
+{{else}}
+    <div class="entry-row">
+        <div class="entry-label">
+            <label for="{{concat elementId '-profile-select'}}">
+                <span class="sr-only">
+                    {{t "webrtcDevices.profiles"}}
+                </span>
+                <i class="pc-moon pc-video" title="{{t "webrtcDevices.profileSelect"}}"></i>
+            </label>
+        </div>
+        <div class="entry-values">
+            {{#dropdown-menu title=selectedProfileName id=(concat elementId '-profile-select1')}}
+                {{#each profileFilteredList as |profile|}}
+                    <li id='{{profile.name}}'>
+                        <a role="menuitem" tabindex="-1" {{action 'changeProfile' profile}}>
+                            {{profile.name}}
+                            <button class='right-btn' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile bubbles=false}}>
+                                <i class="pc-remove-item"></i>
+                                <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
+                            </button>
+                        </a>
+                    </li>
+                {{/each}}
+                <li id='default'><a role="menuitem" tabindex="-1" {{action 'useComputerSettings'}}>{{t "webrtcDevices.useComputerSettings"}}</a></li>
+                <li class='divider'></li>
+                <li id='new'><a role="menuitem" tabindex="-1" {{action 'createNewProfile'}}>{{t "webrtcDevices.newProfile"}}</a></li>
+            {{/dropdown-menu}}
+        </div>
+        {{#if canEdit}}
+        <div class="entry-action">
+            <button title="{{t "webrtcDevices.editProfile"}}" {{action "showEditProfile"}}>
+                <i class="pc-edit"></i>
+                <span class='sr-only'>{{t "webrtcDevices.editProfile"}}</span>
+            </button>
+        </div>
+        {{/if}}
+    </div>
+{{/if}}

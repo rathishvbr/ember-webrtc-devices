@@ -24,6 +24,16 @@
     "outputDeviceLabel": "Speaker {number}",
     "outputDeviceSystemDefault": "System default",
     "default": "Default",
-    "windowsCommunication": "Windows Communication Device"
+    "windowsCommunication": "Windows Communication Device",
+
+    "profiles": "Profiles",
+    "profileSelect": "Select profile",
+    "useComputerSettings": "Use Computer settings",
+    "newProfile": "New Profile",
+    "editProfile": "Edit Profile",
+    "removeProfile": "Remove Profile",
+    "profileNameLabel": "Profile Name",
+    "saveLabel": "Save",
+    "cancelLabel": "Cancel"
   }
 }
