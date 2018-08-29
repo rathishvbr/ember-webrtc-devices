@@ -93,38 +93,3 @@ export default Ember.Component.extend({
     }
 
 });
-
-/*
-Dropdown.prototype.keydown = function (e) {
-    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return;
-
-    var $this = $(this);
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    if ($this.is('.disabled, :disabled')) return;
-
-    var $parent  = getParent($this);
-    var isActive = $parent.hasClass('open');
-
-    if (!isActive && e.which != 27 || isActive && e.which == 27) {
-      if (e.which == 27) $parent.find(toggle).trigger('focus');
-      return $this.trigger('click');
-    }
-
-    var desc = ' li:not(.disabled):visible a';
-    var desc2 = ' li:not(.disabled):visible button';
-    var $items = $parent.find('.dropdown-menu' + desc + ', .dropdown-menu' + desc2);
-
-    if (!$items.length) return;
-
-    var index = $items.index(e.target);
-
-    if (e.which == 38 && index > 0)                 index--;         // up
-    if (e.which == 40 && index < $items.length - 1) index++;         // down
-    if (!~index)                                    index = 0;
-
-    $items.eq(index).trigger('focus');
-  };
-*/
