@@ -135,19 +135,25 @@
         <div class="entry-values">
             {{#dropdown-menu title=selectedProfileName id=(concat elementId '-profile-select1')}}
                 {{#each profileFilteredList as |profile|}}
-                    <li id='{{profile.name}}'>
-                        <a role="menuitem" tabindex="-1" {{action 'changeProfile' profile}}>
-                            {{profile.name}}
-                            <button class='right-btn' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile bubbles=false}}>
+                    <li id='{{profile.name}}' class="{{if profile.isDisabled "disabled"}}">
+                        {{#if profile.isDisabled}}
+                            <a role="menuitem" tabindex="0">
+                                {{profile.name}}
+                            </a>
+                        {{else}}
+                            <a role="menuitem" tabindex="0" {{action 'changeProfile' profile}}>
+                                {{profile.name}}
+                            </a>
+                            <button class='right-btn' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.name bubbles=false}}>
                                 <i class="pc-remove-item"></i>
                                 <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
                             </button>
-                        </a>
+                        {{/if}}
                     </li>
                 {{/each}}
-                <li id='default'><a role="menuitem" tabindex="-1" {{action 'useComputerSettings'}}>{{t "webrtcDevices.useComputerSettings"}}</a></li>
+                <li id='default'><a role="menuitem" tabindex="0" {{action 'useComputerSettings'}}>{{t "webrtcDevices.useComputerSettings"}}</a></li>
                 <li class='divider'></li>
-                <li id='new'><a role="menuitem" tabindex="-1" {{action 'createNewProfile'}}>{{t "webrtcDevices.newProfile"}}</a></li>
+                <li id='new'><a role="menuitem" tabindex="0" {{action 'createNewProfile'}}>{{t "webrtcDevices.newProfile"}}</a></li>
             {{/dropdown-menu}}
         </div>
         {{#if canEdit}}

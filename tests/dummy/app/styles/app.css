@@ -78,6 +78,14 @@ select {
   position: relative;
 }
 
+.dropdown-menu-view .dropdown-menu > li.disabled a, .dropdown-menu-view .dropdown-menu > div.disabled a,
+.dropdown-menu-view .dropdown-menu > li.disabled a:hover, .dropdown-menu-view .dropdown-menu > div.disabled a:hover, 
+.dropdown-menu-view .dropdown-menu > li.disabled a:focus, .dropdown-menu-view .dropdown-menu > div.disabled a:focus {
+  color: #777;
+  background-color: initial;
+  cursor: default;
+}
+
 .dropdown-menu-view .dropdown-menu > li:hover, .dropdown-menu-view .dropdown-menu > div:hover {
   cursor: pointer;
 }
@@ -111,6 +119,11 @@ select {
 .profile-selection > .entry-row > .entry-values {
   flex-grow: 1;
 }
+
+.profile-selection button {
+  cursor: pointer;
+}
+
 .profile-selection > .entry-row .sr-only {
   display: none;
 }
@@ -118,7 +131,6 @@ select {
   height: 26px;
   width: 30px;
   margin-left: -1px;
-  cursor: pointer;
 }
 .pc-edit {
   color: #000;
@@ -144,11 +156,6 @@ select {
   border-right: solid 5px currentColor;
   border-top: solid 2px transparent;
   border-bottom: solid 2px transparent;
-}
-
-.dropdown-menu-view .dropdown-menu > li a:focus i.pc-remove-item, .dropdown-menu-view .dropdown-menu > div a:focus i.pc-remove-item,
-.dropdown-menu-view .dropdown-menu > li a:hover i.pc-remove-item, .dropdown-menu-view .dropdown-menu > div a:hover i.pc-remove-item {
-  color: #FDFDFD;
 }
 
 .right-btn {

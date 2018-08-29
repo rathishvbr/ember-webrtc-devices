@@ -32,56 +32,58 @@ export default Component.extend(/* LoggerMixin, */{
   audioCallCapable: computed.reads('webrtc.audioCallCapable'),
   videoCallCapable: computed.reads('webrtc.videoCallCapable'),
 
-  profileFilteredList: computed.filter('savedProfiles',
-    function(item) {
+  profileFilteredList: computed('savedProfiles.[]', 'webrtc.cameraList', 'webrtc.microphoneList', 'webrtc.outputDeviceList', 'webrtc.resolutionList', function () {
+    return this.get('savedProfiles').map((item) => {
       var canBeSelected = true;
       canBeSelected &= item.selectedCamera ? !!this.get('webrtc.cameraList').findBy('deviceId', item.selectedCamera.deviceId) : true;
       canBeSelected &= item.selectedResolution ? !!this.get('webrtc.resolutionList').findBy('presetId', item.selectedResolution.presetId) : true;
       canBeSelected &= item.selectedMicrophone ? !!this.get('webrtc.microphoneList').findBy('deviceId', item.selectedMicrophone.deviceId) : true;
       canBeSelected &= item.selectedOutputDevice ? !!this.get('webrtc.outputDeviceList').findBy('deviceId', item.selectedOutputDevice.deviceId) : true;
-      return canBeSelected;
-    }
-  ).property('savedProfiles.[]', 'webrtc.cameraList', 'webrtc.microphoneList', 'webrtc.outputDeviceList', 'webrtc.resolutionList'),
+      return Object.assign({
+        isDisabled: !canBeSelected
+      }, item);
+    });
+  }),
 
   profileNameLabel: computed(function () {
     return this.get('intl').t('webrtcDevices.profileNameLabel');
   }),
 
-  canEdit: computed(function () {
+  canEdit: computed('selectedProfile.name', function () {
     return !!this.get('selectedProfile.name');
-  }).property('selectedProfile.name'),
+  }),
 
-  selectedProfileName: computed(function () {
+  selectedProfileName: computed('selectedProfile.name', function () {
     return this.getWithDefault('selectedProfile.name', this.get('intl').t('webrtcDevices.useComputerSettings'));
-  }).property('selectedProfile.name'),
+  }),
 
-  selectedCameraId: computed(function () {
+  selectedCameraId: computed('selectedProfile.selectedCamera', function () {
     if (this.get('selectedProfile.selectedCamera')) {
       return this.get('selectedProfile.selectedCamera.deviceId');
     }
     return null;
-  }).property('selectedProfile.selectedCamera'),
+  }),
 
-  selectedMicrophoneId: computed(function () {
+  selectedMicrophoneId: computed('selectedProfile.selectedMicrophone', function () {
     if (this.get('selectedProfile.selectedMicrophone')) {
       return this.get('selectedProfile.selectedMicrophone.deviceId');
     }
     return null;
-  }).property('selectedProfile.selectedMicrophone'),
+  }),
 
-  selectedResolutionId: computed(function () {
+  selectedResolutionId: computed('selectedProfile.selectedResolution', function () {
     if (this.get('selectedProfile.selectedResolution')) {
       return this.get('selectedProfile.selectedResolution.presetId');
     }
     return null;
-  }).property('selectedProfile.selectedResolution'),
+  }),
 
-  selectedOutputDeviceId: computed(function () {
+  selectedOutputDeviceId: computed('selectedProfile.selectedOutputDevice', function () {
     if (this.get('selectedProfile.selectedOutputDevice')) {
       return this.get('selectedProfile.selectedOutputDevice.deviceId');
     }
     return null;
-  }).property('selectedProfile.selectedOutputDevice'),
+  }),
 
   init () {
     this._super(...arguments);
@@ -92,7 +94,11 @@ export default Component.extend(/* LoggerMixin, */{
   },
 
   profileFilteredListChanged () {
-    if (this.get('selectedProfile.name') && !this.get('profileFilteredList').findBy('name', this.get('selectedProfile.name'))) {
+    if (!this.get('selectedProfile.name')) {
+      return;
+    }
+    const find = this.get('profileFilteredList').find((item) => item.name === this.get('selectedProfile.name'));
+    if (!find || find.isDisabled) {
       this.set('selectedProfile', {
         selectedCamera: this.get('webrtc.cameraList').findBy('deviceId', 'default'),
         selectedMicrophone: this.get('webrtc.microphoneList').findBy('deviceId', 'default'),
@@ -164,8 +170,9 @@ export default Component.extend(/* LoggerMixin, */{
       });
     },
 
-    deleteProfile (profile) {
-      this.get('savedProfiles').removeObject(profile);
+    deleteProfile (profileName) {
+      var profileObj = this.get('savedProfiles').findBy('name', profileName);
+      this.get('savedProfiles').removeObject(profileObj);
       if (typeof this.attrs.saveProfiles === 'function') {
         this.attrs.saveProfiles(this.get('savedProfiles.[]'));
       }

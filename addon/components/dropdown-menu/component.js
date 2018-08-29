@@ -63,8 +63,7 @@ export default Ember.Component.extend({
                 return this.set('showMenu', true);
             }
             var desc = ' li:not(.disabled):visible > a';
-            var desc2 = ' li:not(.disabled):visible > button';
-            var $items = $parent.find('.dropdown-menu' + desc + ', .dropdown-menu' + desc2);
+            var $items = $parent.find('.dropdown-menu' + desc);
 
             if (!$items.length) {
                 return;
