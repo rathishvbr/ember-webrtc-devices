@@ -30,9 +30,10 @@ export default Component.extend(/* LoggerMixin, */{
   // TODO: remove this when we can get an event from intl about translations being loaded
   init () {
     this._super(...arguments);
-
-    this.get('webrtc').enumerateDevices();
-    this.get('webrtc').enumerateResolutions();
+    setTimeout(() => {
+      this.get('webrtc').enumerateDevices();
+      this.get('webrtc').enumerateResolutions();
+    });
   },
 
   didInsertElement () {

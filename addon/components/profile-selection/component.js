@@ -87,8 +87,10 @@ export default Component.extend(/* LoggerMixin, */{
 
   init () {
     this._super(...arguments);
-    this.get('webrtc').enumerateDevices();
-    this.get('webrtc').enumerateResolutions();
+    setTimeout(() => {
+      this.get('webrtc').enumerateDevices();
+      this.get('webrtc').enumerateResolutions();
+    });
     this.addObserver('profileFilteredList', this, 'profileFilteredListChanged');
     this.addObserver('showEditPart', this, 'onShowEditPartChanged')
   },
