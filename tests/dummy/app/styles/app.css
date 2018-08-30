@@ -37,16 +37,16 @@ select {
 }
 
 .ion-arrow-down-b {
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 5px solid black;
 }
 
 .ion-arrow-up-b {
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-bottom: 5px solid black;
@@ -65,7 +65,7 @@ select {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-  
+
 .dropdown-menu-view .dropdown-menu {
   width: 100%;
   margin: 4px 0;
@@ -79,7 +79,7 @@ select {
 }
 
 .dropdown-menu-view .dropdown-menu > li.disabled a, .dropdown-menu-view .dropdown-menu > div.disabled a,
-.dropdown-menu-view .dropdown-menu > li.disabled a:hover, .dropdown-menu-view .dropdown-menu > div.disabled a:hover, 
+.dropdown-menu-view .dropdown-menu > li.disabled a:hover, .dropdown-menu-view .dropdown-menu > div.disabled a:hover,
 .dropdown-menu-view .dropdown-menu > li.disabled a:focus, .dropdown-menu-view .dropdown-menu > div.disabled a:focus {
   color: #777;
   background-color: initial;
@@ -132,7 +132,7 @@ select {
   width: 30px;
   margin-left: -1px;
 }
-.pc-edit {
+.pc-pencil {
   color: #000;
   position: absolute;
   margin-left: -4px;
@@ -145,7 +145,7 @@ select {
           transform: rotate(-45deg);
 }
 
-.pc-edit:before {
+.pc-pencil:before {
   content: '';
   position: absolute;
   left: -12px;
@@ -194,4 +194,3 @@ select {
   -webkit-transform: rotate(-45deg);
           transform: rotate(-45deg);
 }
-

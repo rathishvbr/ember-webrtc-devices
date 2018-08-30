@@ -110,10 +110,10 @@
                     </div>
                 </div>
             {{/if}}
-            <button {{action "saveProfileEdition"}} title="{{t "webrtcDevices.saveLabel"}}">
+            <button {{action "saveProfileEdition"}} class='btn btn-info' title="{{t "webrtcDevices.saveLabel"}}">
                 {{t "webrtcDevices.saveLabel"}}
             </button>
-            <button {{action "cancelProfileEdition"}} title="{{t "webrtcDevices.cancelLabel"}}">
+            <button {{action "cancelProfileEdition"}} class='btn btn-info' title="{{t "webrtcDevices.cancelLabel"}}">
                 {{t "webrtcDevices.cancelLabel"}}
             </button>
         {{else}}
@@ -129,11 +129,10 @@
                 <span class="sr-only">
                     {{t "webrtcDevices.profiles"}}
                 </span>
-                <i class="pc-moon pc-video" title="{{t "webrtcDevices.profileSelect"}}"></i>
             </label>
         </div>
         <div class="entry-values">
-            {{#dropdown-menu title=selectedProfileName id=(concat elementId '-profile-select1')}}
+            {{#profile-dropdown-menu title=selectedProfileName id=(concat elementId '-profile-select1')}}
                 {{#each profileFilteredList as |profile|}}
                     <li id='{{profile.name}}' class="{{if profile.isDisabled "disabled"}}">
                         {{#if profile.isDisabled}}
@@ -144,8 +143,8 @@
                             <a role="menuitem" tabindex="0" {{action 'changeProfile' profile}}>
                                 {{profile.name}}
                             </a>
-                            <button class='right-btn' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.name bubbles=false}}>
-                                <i class="pc-remove-item"></i>
+                            <button class='btn btn-delete' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.name bubbles=false}}>
+                                <i class="pc pc-delete"></i>
                                 <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
                             </button>
                         {{/if}}
@@ -154,12 +153,12 @@
                 <li id='default'><a role="menuitem" tabindex="0" {{action 'useComputerSettings'}}>{{t "webrtcDevices.useComputerSettings"}}</a></li>
                 <li class='divider'></li>
                 <li id='new'><a role="menuitem" tabindex="0" {{action 'createNewProfile'}}>{{t "webrtcDevices.newProfile"}}</a></li>
-            {{/dropdown-menu}}
+            {{/profile-dropdown-menu}}
         </div>
         {{#if canEdit}}
             <div class="entry-action">
-                <button title="{{t "webrtcDevices.editProfile"}}" {{action "showEditProfile"}}>
-                    <i class="pc-edit"></i>
+                <button title="{{t "webrtcDevices.editProfile"}}" class="btn btn-edit" {{action "showEditProfile"}}>
+                    <i class="pc pc-pencil"></i>
                     <span class='sr-only'>{{t "webrtcDevices.editProfile"}}</span>
                 </button>
             </div>
