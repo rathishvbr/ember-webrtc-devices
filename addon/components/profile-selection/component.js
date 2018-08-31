@@ -10,11 +10,6 @@ export default Component.extend(/* LoggerMixin, */{
   layout: layout,
   classNameBindings: [':profile-selection'],
 
-  selectedMicrophone: null,
-  selectedResolution: null,
-  selectedOutputDevice: null,
-  selectedCamera: null,
-
   selectedProfile: {},
   previousSelectedProfile: {},
   showEditPart: false,
@@ -31,6 +26,10 @@ export default Component.extend(/* LoggerMixin, */{
 
   audioCallCapable: computed.reads('webrtc.audioCallCapable'),
   videoCallCapable: computed.reads('webrtc.videoCallCapable'),
+
+  showTroubleshoot: computed('troubleshoot', function () {
+    return this.get('troubleshoot') && typeof this.attrs.openTroubleshoot === 'function';
+  }),
 
   profileFilteredList: computed('savedProfiles.[]', 'webrtc.cameraList', 'webrtc.microphoneList', 'webrtc.outputDeviceList', 'webrtc.resolutionList', function () {
     return this.get('savedProfiles').map((item) => {
@@ -92,7 +91,19 @@ export default Component.extend(/* LoggerMixin, */{
       this.get('webrtc').enumerateResolutions();
     });
     this.addObserver('profileFilteredList', this, 'profileFilteredListChanged');
-    this.addObserver('showEditPart', this, 'onShowEditPartChanged')
+    this.addObserver('showEditPart', this, 'onShowEditPartChanged');
+    this.addObserver('_selectedProfileName', this, 'onSelectedProfileNameChanged');
+  },
+
+  onSelectedProfileNameChanged () {
+    if (!this.get('_selectedProfileName')) {
+      return;
+    }
+    const find = this.get('profileFilteredList').find((item) => item.name === this.get('_selectedProfileName'));
+    if (find) {
+      this.set('selectedProfile', find);
+      this.send('setProfileAsActive');
+    }
   },
 
   profileFilteredListChanged () {
@@ -130,6 +141,19 @@ export default Component.extend(/* LoggerMixin, */{
   }),
 
   actions: {
+    setProfileAsActive () {
+      this.set('previousSelectedProfile', this.get('selectedProfile'));
+      if (typeof this.attrs.selectedProfileChanged === 'function') {
+        this.attrs.selectedProfileChanged(this.get('selectedProfile'));
+      }
+    },
+
+    openTroubleshoot () {
+      if (typeof this.attrs.openTroubleshoot === 'function') {
+        this.attrs.openTroubleshoot();
+      }
+    },
+
     showEditProfile () {
       this.set('showEditPart', true);
     },
@@ -141,10 +165,6 @@ export default Component.extend(/* LoggerMixin, */{
 
     saveProfileEdition () {
       this.set('showEditPart', false);
-      this.set('selectedProfile.selectedCamera', this.get('selectedCamera'));
-      this.set('selectedProfile.selectedMicrophone', this.get('selectedMicrophone'));
-      this.set('selectedProfile.selectedOutputDevice', this.get('selectedOutputDevice'));
-      this.set('selectedProfile.selectedResolution', this.get('selectedResolution'));
       let profile = this.get('savedProfiles').findBy('name', this.get('selectedProfile.name'));
       if (!profile) {
         this.get('savedProfiles').pushObject(this.get('selectedProfile'));
@@ -152,11 +172,12 @@ export default Component.extend(/* LoggerMixin, */{
       if (typeof this.attrs.saveProfiles === 'function') {
         this.attrs.saveProfiles(this.get('savedProfiles.[]'));
       }
+      this.send('setProfileAsActive');
     },
 
     useComputerSettings () {
       this.set('selectedProfile', {});
-      this.set('previousSelectedProfile', this.get('selectedProfile'));
+      this.send('setProfileAsActive');
       setTimeout(() => {
         this.$('button:first').focus();
       });
@@ -182,7 +203,7 @@ export default Component.extend(/* LoggerMixin, */{
 
     changeProfile (profile) {
       this.set('selectedProfile', this.get('savedProfiles').findBy('name', profile.name));
-      this.set('previousSelectedProfile', this.get('selectedProfile'));
+      this.send('setProfileAsActive');
       setTimeout(() => {
         this.$('button:first').focus();
       });
@@ -190,25 +211,25 @@ export default Component.extend(/* LoggerMixin, */{
 
     changeCamera (id) {
       if (this.get('selectedCamera.deviceId') !== id) {
-        this.set('selectedCamera', this.get('webrtc.cameraList').findBy('deviceId', id));
+        this.set('selectedProfile.selectedCamera', this.get('webrtc.cameraList').findBy('deviceId', id));
       }
     },
 
     changeMicrophone (id) {
       if (this.get('selectedMicrophone.deviceId') !== id) {
-        this.set('selectedMicrophone', this.get('webrtc.microphoneList').findBy('deviceId', id));
+        this.set('selectedProfile.selectedMicrophone', this.get('webrtc.microphoneList').findBy('deviceId', id));
       }
     },
 
     changeOutputDevice (id) {
       if (this.get('selectedOutputDevice.deviceId') !== id) {
-        this.set('selectedOutputDevice', this.get('webrtc.outputDeviceList').findBy('deviceId', id));
+        this.set('selectedProfile.selectedOutputDevice', this.get('webrtc.outputDeviceList').findBy('deviceId', id));
       }
     },
 
     changeResolution (id) {
       if (this.get('selectedResolution.presetId') !== id) {
-        this.set('selectedResolution', this.get('webrtc.resolutionList').findBy('presetId', id));
+        this.set('selectedProfile.selectedResolution', this.get('webrtc.resolutionList').findBy('presetId', id));
       }
     }
   }

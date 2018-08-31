@@ -165,3 +165,12 @@
         {{/if}}
     </div>
 {{/if}}
+{{#if showTroubleshoot}}
+    <div class="entry-row troubleshoot">
+        <div class="entry-values">
+            <button type="button" class="btn btn-link troubleshoot-link" {{action "openTroubleshoot"}}>
+                {{t "webrtcDevices.troubleshoot"}}
+            </button>
+        </div>
+    </div>
+{{/if}}
