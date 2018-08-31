@@ -40,6 +40,7 @@ export default Ember.Component.extend({
             });
         });
         Ember.$('#'+id).on(`keydown.${id}`, (event) => {
+            // 38 up | 40 down | 27 esc | 32 space | 13 enter
             if (!/(38|40|27|32|13)/.test(event.which)) {
                 return;
             }
