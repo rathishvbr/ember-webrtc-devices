@@ -104,7 +104,7 @@ export default Component.extend(/* LoggerMixin, */{
       this.send('setProfileAsActive');
     }
   },
-  
+
   /*
   * when list is changing if the profile selected is no more available we switch to default
   */
@@ -115,6 +115,7 @@ export default Component.extend(/* LoggerMixin, */{
     const find = this.get('profileFilteredList').find((item) => item.id === this.get('selectedProfile.id'));
     if (!find || find.isDisabled) {
       this.set('selectedProfile', Object.assign({}, this.get('defaultConfig')));
+      this.send('setProfileAsActive');
     }
   },
 
