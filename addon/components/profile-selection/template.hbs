@@ -143,7 +143,7 @@
                             <a role="menuitem" tabindex="0" {{action 'changeProfile' profile}}>
                                 {{profile.name}}
                             </a>
-                            <button class='btn btn-delete' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.name bubbles=false}}>
+                            <button class='btn btn-delete' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.id bubbles=false}}>
                                 <i class="pc pc-delete"></i>
                                 <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
                             </button>
