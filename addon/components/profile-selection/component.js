@@ -65,10 +65,9 @@ export default Component.extend(/* LoggerMixin, */{
 
   init () {
     this._super(...arguments);
-    setTimeout(() => {
-      this.get('webrtc').enumerateDevices();
-      this.get('webrtc').enumerateResolutions();
-    });
+
+    this.get('webrtc').enumerateDevices();
+    this.get('webrtc').enumerateResolutions();
     this.set('selectedProfileName', this.get('intl').t('webrtcDevices.useComputerSettings'))
     this.addObserver('profileFilteredList', this, 'profileFilteredListChanged');
     this.addObserver('showEditPart', this, 'onShowEditPartChanged');
@@ -94,7 +93,7 @@ export default Component.extend(/* LoggerMixin, */{
     }
     const find = this.get('profileFilteredList').find((item) => item.id === this.get('selectedProfileId'));
     if (find) {
-      this.set('selectedProfile', find);
+      this.set('selectedProfile', Object.assign({}, find));
       this.send('setProfileAsActive');
     }
   },
@@ -136,7 +135,7 @@ export default Component.extend(/* LoggerMixin, */{
 
   actions: {
     setProfileAsActive () {
-      this.set('previousSelectedProfile', this.get('selectedProfile'));
+      this.set('previousSelectedProfile', Object.assign({}, this.get('selectedProfile')));
       if (typeof this.attrs.selectedProfileChanged === 'function') {
         this.attrs.selectedProfileChanged({
           id: this.get('selectedProfile.id'),
@@ -157,11 +156,13 @@ export default Component.extend(/* LoggerMixin, */{
 
     showEditProfile () {
       this.set('showEditPart', true);
+
     },
 
     cancelProfileEdition () {
       this.set('showEditPart', false);
-      this.set('selectedProfile', this.get('previousSelectedProfile'));
+      this.set('selectedProfile', Object.assign({}, this.get('previousSelectedProfile')));
+      this.set('selectedProfileName', this.getWithDefault('selectedProfile.name', this.get('intl').t('webrtcDevices.useComputerSettings')));
     },
 
     saveProfileEdition () {
@@ -171,7 +172,7 @@ export default Component.extend(/* LoggerMixin, */{
       }
 
       this.set('showEditPart', false);
-      this.set('selectedProfileName', this.get('selectedProfile.name'))
+      this.set('selectedProfileName', this.get('selectedProfile.name'));
       this.set('selectedProfile.selectedCameraId', this.get('selectedCameraId'));
       this.set('selectedProfile.selectedMicrophoneId', this.get('selectedMicrophoneId'));
       this.set('selectedProfile.selectedOutputDeviceId', this.get('selectedOutputDeviceId'));
@@ -183,6 +184,10 @@ export default Component.extend(/* LoggerMixin, */{
       }
       if (!profile && !this.get('savedProfiles').findBy('id', this.get('selectedProfile.id'))) {
         this.get('savedProfiles').pushObject(this.get('selectedProfile'));
+      } else {
+        profile = this.get('savedProfiles').findBy('id', this.get('selectedProfile.id'));
+        let index = this.get('savedProfiles').indexOf(profile);
+        this.get('savedProfiles.[]').replace(index, 1, Object.assign({}, this.get('selectedProfile')));
       }
       if (typeof this.attrs.saveProfiles === 'function') {
         this.attrs.saveProfiles(this.get('savedProfiles.[]'));
@@ -223,7 +228,7 @@ export default Component.extend(/* LoggerMixin, */{
     },
 
     changeProfile (profile) {
-      this.set('selectedProfile', this.get('savedProfiles').findBy('id', profile.id));
+      this.set('selectedProfile', Object.assign({}, this.get('savedProfiles').findBy('id', profile.id)));
       this.send('setProfileAsActive');
       setTimeout(() => {
         this.$('button:first').focus();
