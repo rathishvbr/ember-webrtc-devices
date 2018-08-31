@@ -25,16 +25,21 @@ export default Component.extend(/* LoggerMixin, */{
   savedProfiles: Ember.A(),
 
   audio: true,
+  isReadOnly: false,
   video: true,
   troubleshoot: true,
   outputDevice: true,
   resolution: true,
   canEdit: false,
 
-  selectedMicrophone: null,
-  selectedResolution: null,
-  selectedOutputDevice: null,
-  selectedCamera: null,
+  defaultConfig: computed('webrtc.cameraList', 'webrtc.microphoneList', 'webrtc.outputDeviceList', 'webrtc.resolutionList', function () {
+    return {
+      selectedCameraId: this.get('webrtc.cameraList').findBy('deviceId', 'default'),
+      selectedMicrophoneId: this.get('webrtc.microphoneList').findBy('deviceId', 'default'),
+      selectedOutputDeviceId: this.get('webrtc.outputDeviceList').findBy('deviceId', 'default'),
+      selectedResolutionId: this.get('webrtc.resolutionList').findBy('presetId', 3)
+    }
+  }),
 
   webrtc: inject.service(),
   intl: inject.service(),
@@ -49,10 +54,10 @@ export default Component.extend(/* LoggerMixin, */{
   profileFilteredList: computed('savedProfiles.[]', 'webrtc.cameraList', 'webrtc.microphoneList', 'webrtc.outputDeviceList', 'webrtc.resolutionList', function () {
     return this.get('savedProfiles').map((item) => {
       var canBeSelected = true;
-      canBeSelected &= item.selectedCameraId ? !!this.get('webrtc.cameraList').findBy('deviceId', item.selectedCameraId) : true;
-      canBeSelected &= item.selectedResolutionId ? !!this.get('webrtc.resolutionList').findBy('presetId', item.selectedResolutionId) : true;
-      canBeSelected &= item.selectedMicrophoneId ? !!this.get('webrtc.microphoneList').findBy('deviceId', item.selectedMicrophoneId) : true;
-      canBeSelected &= item.selectedOutputDeviceId ? !!this.get('webrtc.outputDeviceList').findBy('deviceId', item.selectedOutputDeviceId) : true;
+      canBeSelected &= item.selectedCamera ? !!this.get('webrtc.cameraList').findBy('deviceId', item.selectedCamera.deviceId) : true;
+      canBeSelected &= item.selectedResolution ? !!this.get('webrtc.resolutionList').findBy('presetId', item.selectedResolution.presetId) : true;
+      canBeSelected &= item.selectedMicrophone ? !!this.get('webrtc.microphoneList').findBy('deviceId', item.selectedMicrophone.deviceId) : true;
+      canBeSelected &= item.selectedOutputDevice ? !!this.get('webrtc.outputDeviceList').findBy('deviceId', item.selectedOutputDevice.deviceId) : true;
       return Object.assign({
         isDisabled: !canBeSelected
       }, item);
@@ -75,16 +80,18 @@ export default Component.extend(/* LoggerMixin, */{
     this.addObserver('selectedProfile', this, 'onSelectedProfileChange');
   },
 
+  /* this is needed to select correct values in select box */
   onSelectedProfileChange () {
     this.setProperties({
       canEdit: !!this.get('selectedProfile.id'),
       selectedProfileName: this.getWithDefault('selectedProfile.name', this.get('intl').t('webrtcDevices.useComputerSettings')),
-      selectedCameraId: this.get('selectedProfile.selectedCameraId'),
-      selectedMicrophoneId: this.get('selectedProfile.selectedMicrophoneId'),
-      selectedOutputDeviceId: this.get('selectedProfile.selectedOutputDeviceId'),
-      selectedResolutionId: this.get('selectedProfile.selectedResolutionId'),
+      selectedCameraId: this.get('selectedProfile.selectedCamera.deviceId'),
+      selectedMicrophoneId: this.get('selectedProfile.selectedMicrophone.deviceId'),
+      selectedOutputDeviceId: this.get('selectedProfile.selectedOutputDevice.deviceId'),
+      selectedResolutionId: this.get('selectedProfile.selectedResolution.presetId'),
     });
   },
+
   /*
   */
   onSelectedProfileIdChanged () {
@@ -97,7 +104,9 @@ export default Component.extend(/* LoggerMixin, */{
       this.send('setProfileAsActive');
     }
   },
+  
   /*
+  * when list is changing if the profile selected is no more available we switch to default
   */
   profileFilteredListChanged () {
     if (!this.get('selectedProfile.id')) {
@@ -105,12 +114,7 @@ export default Component.extend(/* LoggerMixin, */{
     }
     const find = this.get('profileFilteredList').find((item) => item.id === this.get('selectedProfile.id'));
     if (!find || find.isDisabled) {
-      this.set('selectedProfile', {
-        selectedCameraId: 'default',
-        selectedMicrophoneId: 'default',
-        selectedOutputDeviceId: 'default',
-        selectedResolutionId: 3
-      });
+      this.set('selectedProfile', Object.assign({}, this.get('defaultConfig')));
     }
   },
 
@@ -134,15 +138,16 @@ export default Component.extend(/* LoggerMixin, */{
   }),
 
   actions: {
+    /* Sending event to parent when profile is changing */
     setProfileAsActive () {
       this.set('previousSelectedProfile', Object.assign({}, this.get('selectedProfile')));
       if (typeof this.attrs.selectedProfileChanged === 'function') {
         this.attrs.selectedProfileChanged({
           id: this.get('selectedProfile.id'),
-          selectedCamera: this.get('webrtc.cameraList').findBy('deviceId', this.get('selectedProfile.selectedCameraId')),
-          selectedResolution: this.get('webrtc.resolutionList').findBy('presetId', this.get('selectedProfile.selectedResolutionId')),
-          selectedMicrophone: this.get('webrtc.microphoneList').findBy('deviceId', this.get('selectedProfile.selectedMicrophoneId')),
-          selectedOutputDevice: this.get('webrtc.outputDeviceList').findBy('deviceId', this.get('selectedProfile.selectedOutputDeviceId')),
+          selectedCamera: this.get('selectedProfile.selectedCamera'),
+          selectedResolution: this.get('selectedProfile.selectedResolution'),
+          selectedMicrophone: this.get('selectedProfile.selectedMicrophone'),
+          selectedOutputDevice: this.get('selectedProfile.selectedOutputDevice'),
           name: this.get('selectedProfile.name')
         });
       }
@@ -156,7 +161,6 @@ export default Component.extend(/* LoggerMixin, */{
 
     showEditProfile () {
       this.set('showEditPart', true);
-
     },
 
     cancelProfileEdition () {
@@ -173,10 +177,6 @@ export default Component.extend(/* LoggerMixin, */{
 
       this.set('showEditPart', false);
       this.set('selectedProfileName', this.get('selectedProfile.name'));
-      this.set('selectedProfile.selectedCameraId', this.get('selectedCameraId'));
-      this.set('selectedProfile.selectedMicrophoneId', this.get('selectedMicrophoneId'));
-      this.set('selectedProfile.selectedOutputDeviceId', this.get('selectedOutputDeviceId'));
-      this.set('selectedProfile.selectedResolutionId', this.get('selectedResolutionId'));
 
       let profile = this.get('savedProfiles').findBy('name', this.get('selectedProfile.name'));
       if (profile && profile.id != this.get('selectedProfile.id')) {
@@ -196,12 +196,7 @@ export default Component.extend(/* LoggerMixin, */{
     },
 
     useComputerSettings () {
-      this.set('selectedProfile', {
-        selectedCameraId: 'default',
-        selectedMicrophoneId: 'default',
-        selectedOutputDeviceId: 'default',
-        selectedResolutionId: 3
-      });
+      this.set('selectedProfile', Object.assign({}, this.get('defaultConfig')));
       this.send('setProfileAsActive');
       setTimeout(() => {
         this.$('button:first').focus();
@@ -210,13 +205,7 @@ export default Component.extend(/* LoggerMixin, */{
 
     createNewProfile () {
       this.set('showEditPart', true);
-      this.set('selectedProfile', {
-        id: guid(),
-        selectedCameraId: 'default',
-        selectedMicrophoneId: 'default',
-        selectedOutputDeviceId: 'default',
-        selectedResolutionId: 3
-      });
+      this.set('selectedProfile', Object.assign({id: guid()}, this.get('defaultConfig')));
     },
 
     deleteProfile (profileId) {
@@ -237,25 +226,25 @@ export default Component.extend(/* LoggerMixin, */{
 
     changeCamera (id) {
       if (this.get('selectedCamera.deviceId') !== id) {
-        this.set('selectedCamera', this.get('webrtc.cameraList').findBy('deviceId', id));
+        this.set('selectedProfile.selectedCamera', this.get('webrtc.cameraList').findBy('deviceId', id));
       }
     },
 
     changeMicrophone (id) {
       if (this.get('selectedMicrophone.deviceId') !== id) {
-        this.set('selectedMicrophone', this.get('webrtc.microphoneList').findBy('deviceId', id));
+        this.set('selectedProfile.selectedMicrophone', this.get('webrtc.microphoneList').findBy('deviceId', id));
       }
     },
 
     changeOutputDevice (id) {
       if (this.get('selectedOutputDevice.deviceId') !== id) {
-        this.set('selectedOutputDevice', this.get('webrtc.outputDeviceList').findBy('deviceId', id));
+        this.set('selectedProfile.selectedOutputDevice', this.get('webrtc.outputDeviceList').findBy('deviceId', id));
       }
     },
 
     changeResolution (id) {
       if (this.get('selectedResolution.presetId') !== id) {
-        this.set('selectedResolution', this.get('webrtc.resolutionList').findBy('presetId', id));
+        this.set('selectedProfile.selectedResolution', this.get('webrtc.resolutionList').findBy('presetId', id));
       }
     }
   }

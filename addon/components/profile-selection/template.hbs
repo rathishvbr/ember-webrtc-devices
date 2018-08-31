@@ -143,26 +143,32 @@
                             <a role="menuitem" tabindex="0" {{action 'changeProfile' profile}}>
                                 {{profile.name}}
                             </a>
-                            <button class='btn btn-delete' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.id bubbles=false}}>
-                                <i class="pc pc-delete"></i>
-                                <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
-                            </button>
+                            {{#unless isReadOnly}}
+                              <button class='btn btn-delete' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.id bubbles=false}}>
+                                  <i class="pc pc-delete"></i>
+                                  <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
+                              </button>
+                            {{/unless}}
                         {{/if}}
                     </li>
                 {{/each}}
                 <li id='default'><a role="menuitem" tabindex="0" {{action 'useComputerSettings'}}>{{t "webrtcDevices.useComputerSettings"}}</a></li>
-                <li class='divider'></li>
-                <li id='new'><a role="menuitem" tabindex="0" {{action 'createNewProfile'}}>{{t "webrtcDevices.newProfile"}}</a></li>
+                {{#unless isReadOnly}}
+                  <li class='divider'></li>
+                  <li id='new'><a role="menuitem" tabindex="0" {{action 'createNewProfile'}}>{{t "webrtcDevices.newProfile"}}</a></li>
+                {{/unless}}
             {{/profile-dropdown-menu}}
         </div>
-        {{#if canEdit}}
-            <div class="entry-action">
-                <button title="{{t "webrtcDevices.editProfile"}}" class="btn btn-edit" {{action "showEditProfile"}}>
-                    <i class="pc pc-pencil"></i>
-                    <span class='sr-only'>{{t "webrtcDevices.editProfile"}}</span>
-                </button>
-            </div>
-        {{/if}}
+        {{#unless isReadOnly}}
+          {{#if canEdit}}
+              <div class="entry-action">
+                  <button title="{{t "webrtcDevices.editProfile"}}" class="btn btn-edit" {{action "showEditProfile"}}>
+                      <i class="pc pc-pencil"></i>
+                      <span class='sr-only'>{{t "webrtcDevices.editProfile"}}</span>
+                  </button>
+              </div>
+          {{/if}}
+        {{/unless}}
     </div>
 {{/if}}
 {{#if showTroubleshoot}}
