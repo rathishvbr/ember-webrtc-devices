@@ -191,7 +191,12 @@ export default Component.extend(/* LoggerMixin, */{
     },
 
     useComputerSettings () {
-      this.set('selectedProfile', {});
+      this.set('selectedProfile', {
+        selectedCameraId: 'default',
+        selectedMicrophoneId: 'default',
+        selectedOutputDeviceId: 'default',
+        selectedResolutionId: 3
+      });
       this.send('setProfileAsActive');
       setTimeout(() => {
         this.$('button:first').focus();
