@@ -1,18 +1,9 @@
-
 // import LoggerMixin from 'web-directory/mixins/logger'
 import Ember from 'ember';
 import layout from './template';
+import { v1 } from "ember-uuid";
 
 const {computed, Component, inject} = Ember;
-
-// generate guid
-const guid = () => {
-   let s4 = () =>
-    Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
 
 export default Component.extend(/* LoggerMixin, */{
 
@@ -64,16 +55,13 @@ export default Component.extend(/* LoggerMixin, */{
     });
   }),
 
-  profileNameLabel: computed(function () {
-    return this.get('intl').t('webrtcDevices.profileNameLabel');
-  }),
-
   init () {
     this._super(...arguments);
 
     this.get('webrtc').enumerateDevices();
     this.get('webrtc').enumerateResolutions();
-    this.set('selectedProfileName', this.get('intl').t('webrtcDevices.useComputerSettings'))
+    this.set('profileNameLabel', this.get('intl').t('webrtcDevices.profileNameLabel'));
+    this.set('selectedProfileName', this.get('intl').t('webrtcDevices.useComputerSettings'));
     this.addObserver('profileFilteredList', this, 'profileFilteredListChanged');
     this.addObserver('showEditPart', this, 'onShowEditPartChanged');
     this.addObserver('selectedProfileId', this, 'onSelectedProfileIdChanged');
@@ -129,14 +117,8 @@ export default Component.extend(/* LoggerMixin, */{
     });
   },
 
-  showOutputDevicePicker: computed('outputDevice', 'audio', function () {
-    return this.get('outputDevice') && this.get('audio');
-  }),
-
-  showResolutionPicker: computed('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'resolution', function () {
-    const webrtc = this.get('webrtc');
-    return webrtc.get('resolutionList.length') && webrtc.get('cameraList.length') && this.get('video') && this.get('resolution');
-  }),
+  showOutputDevicePicker: computed.and('outputDevice', 'audio'),
+  showResolutionPicker: computed.and('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'resolution'),
 
   actions: {
     /* Sending event to parent when profile is changing */
@@ -206,7 +188,7 @@ export default Component.extend(/* LoggerMixin, */{
 
     createNewProfile () {
       this.set('showEditPart', true);
-      this.set('selectedProfile', Object.assign({id: guid()}, this.get('defaultConfig')));
+      this.set('selectedProfile', Object.assign({id: v1()}, this.get('defaultConfig')));
     },
 
     deleteProfile (profileId) {

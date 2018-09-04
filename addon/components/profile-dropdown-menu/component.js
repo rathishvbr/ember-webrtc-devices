@@ -1,18 +1,21 @@
 import Ember from 'ember';
 import layout from './template';
 
+const UP_KEYCODE = 38;
+const DOWN_KEYCODE = 40;
+const ESC_KEYCODE = 27;
+const SPACE_KEYCODE = 32;
+const ENTER_KEYCODE = 13;
+
 const getParent = ($this) => {
     var selector = $this.attr('data-target');
-
     if (!selector) {
       selector = $this.attr('href');
       selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, ''); // strip for ie7
     }
-
     var $parent = selector && $(selector);
-
     return $parent && $parent.length ? $parent : $this.parent();
-  };
+};
 
 export default Ember.Component.extend({
     classNames: ['dropdown-menu-view'],
@@ -40,8 +43,8 @@ export default Ember.Component.extend({
             });
         });
         Ember.$('#'+id).on(`keydown.${id}`, (event) => {
-            // 38 up | 40 down | 27 esc | 32 space | 13 enter
-            if (!/(38|40|27|32|13)/.test(event.which)) {
+            var regxp = new RegExp(`${UP_KEYCODE}|${DOWN_KEYCODE}|${ESC_KEYCODE}|${SPACE_KEYCODE}|${ENTER_KEYCODE}`);
+            if (!regxp.test(event.which)) {
                 return;
             }
 
@@ -56,8 +59,8 @@ export default Ember.Component.extend({
             var $parent  = getParent($this);
             var isActive = this.get('showMenu');
 
-            if (!isActive && event.which != 27 || isActive && event.which == 27) {
-                if (event.which == 27) {
+            if (!isActive && event.which != ESC_KEYCODE || isActive && event.which == ESC_KEYCODE) {
+                if (event.which == ESC_KEYCODE) {
                     $parent.find('.btn-toggle').trigger('focus');
                     return this.set('showMenu', false);
                 }
@@ -72,17 +75,17 @@ export default Ember.Component.extend({
 
             var index = $items.index(event.target);
 
-            if (event.which == 38 && index > 0)  {
+            if (event.which == UP_KEYCODE && index > 0)  {
                 index--; // up
             }
-            if (event.which == 40 && index < $items.length - 1) {
+            if (event.which == DOWN_KEYCODE && index < $items.length - 1) {
                 index++; // down
             }
             if (!~index) {
                 index = 0;
             }
             $items.eq(index).trigger('focus');
-            if (isActive && (event.which == 13 || event.which == 32))  {
+            if (isActive && (event.which == ENTER_KEYCODE || event.which == SPACE_KEYCODE))  {
                 setTimeout(() => {$items.eq(index).click();});
                 $parent.find('.btn-toggle').trigger('focus');
             }
