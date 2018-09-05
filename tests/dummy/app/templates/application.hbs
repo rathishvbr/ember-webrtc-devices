@@ -14,6 +14,9 @@
   <li>canListDevices: {{webrtc.canListDevices}}</li>
 </ul>
 
+<h3>Profile Selection</h3>
+{{profile-selection savedProfiles=savedProfiles saveProfiles=(action "saveProfiles")}}
+
 <h3>Default</h3>
 {{device-selection}}
 

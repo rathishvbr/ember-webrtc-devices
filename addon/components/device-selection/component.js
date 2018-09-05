@@ -30,9 +30,10 @@ export default Component.extend(/* LoggerMixin, */{
   // TODO: remove this when we can get an event from intl about translations being loaded
   init () {
     this._super(...arguments);
-
-    this.get('webrtc').enumerateDevices();
-    this.get('webrtc').enumerateResolutions();
+    setTimeout(() => {
+      this.get('webrtc').enumerateDevices();
+      this.get('webrtc').enumerateResolutions();
+    });
   },
 
   didInsertElement () {
@@ -74,14 +75,9 @@ export default Component.extend(/* LoggerMixin, */{
     return this.get('troubleshoot') && typeof this.attrs.openTroubleshoot === 'function';
   }),
 
-  showResolutionPicker: computed('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'resolution', function () {
-    const webrtc = this.get('webrtc');
-    return webrtc.get('resolutionList.length') && webrtc.get('cameraList.length') && this.get('video') && this.get('resolution');
-  }),
+  showOutputDevicePicker: computed.and('outputDevice', 'audio'),
+  showResolutionPicker: computed.and('webrtc.resolutionList.length', 'webrtc.cameraList.length', 'video', 'resolution'),
 
-  showOutputDevicePicker: computed('outputDevice', 'audio', function () {
-    return this.get('outputDevice') && this.get('audio');
-  }),
 
   actions: {
     openTroubleshoot () {
