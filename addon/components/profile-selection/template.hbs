@@ -3,7 +3,7 @@
     <div class='device-selection'>
         {{#if webrtc.canListDevices}}
             {{input placeholder=profileNameLabel value=selectedProfile.name id=(concat elementId '-profile-input') classNames="form-control"}}
-            {{#if (and webrtc.microphoneList.length audio)}}
+            {{#if audio}}
                 <div class="entry-row">
                     <div class="entry-label">
                         <label for="{{concat elementId '-microphone-select'}}">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             {{/if}}
-            {{#if (and webrtc.cameraList.length video)}}
+            {{#if video}}
                 <div class="entry-row">
                     <div class="entry-label">
                         <label for="{{concat elementId '-camera-select'}}">
@@ -135,21 +135,15 @@
             {{#profile-dropdown-menu title=selectedProfileName id=(concat elementId '-profile-select1')}}
                 {{#each profileFilteredList as |profile|}}
                     <li id='{{profile.name}}' class="{{if profile.isDisabled "disabled"}}">
-                        {{#if profile.isDisabled}}
-                            <a role="menuitem" tabindex="0">
-                                {{profile.name}}
-                            </a>
-                        {{else}}
-                            <a role="menuitem" tabindex="0" {{action 'changeProfile' profile}}>
-                                {{profile.name}}
-                            </a>
-                            {{#unless isReadOnly}}
-                                <button class='btn btn-delete' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.id bubbles=false}}>
-                                    <i class="pc pc-delete"></i>
-                                    <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
-                                </button>
-                            {{/unless}}
-                        {{/if}}
+                        <a role="menuitem" tabindex="0" {{action 'changeProfile' profile}}>
+                            {{profile.name}}
+                        </a>
+                        {{#unless isReadOnly}}
+                            <button class='btn btn-delete' title="{{t "webrtcDevices.removeProfile"}}" {{action 'deleteProfile' profile.id bubbles=false}}>
+                                <i class="pc pc-delete"></i>
+                                <span class='sr-only'>{{t "webrtcDevices.removeProfile"}}</span>
+                            </button>
+                        {{/unless}}
                     </li>
                 {{/each}}
                 <li id='default'><a role="menuitem" tabindex="0" {{action 'useComputerSettings'}}>{{t "webrtcDevices.useComputerSettings"}}</a></li>

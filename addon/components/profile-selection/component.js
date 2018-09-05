@@ -200,8 +200,10 @@ export default Component.extend(/* LoggerMixin, */{
     },
 
     changeProfile (profile) {
-      this.set('selectedProfile', Object.assign({}, this.get('savedProfiles').findBy('id', profile.id)));
-      this.send('setProfileAsActive');
+      if (!profile.isDisabled) {
+        this.set('selectedProfile', Object.assign({}, this.get('savedProfiles').findBy('id', profile.id)));
+        this.send('setProfileAsActive');
+      }
       setTimeout(() => {
         this.$('button:first').focus();
       });
