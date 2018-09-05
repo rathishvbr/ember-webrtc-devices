@@ -1,9 +1,9 @@
 // import LoggerMixin from 'web-directory/mixins/logger'
 import Ember from 'ember';
 import layout from './template';
-import { v1 } from "ember-uuid";
+import { v1 } from 'ember-uuid';
 
-const {computed, Component, inject} = Ember;
+const { computed, Component, inject } = Ember;
 
 export default Component.extend(/* LoggerMixin, */{
 
@@ -29,7 +29,7 @@ export default Component.extend(/* LoggerMixin, */{
       selectedMicrophoneId: this.get('webrtc.microphoneList').findBy('deviceId', 'default'),
       selectedOutputDeviceId: this.get('webrtc.outputDeviceList').findBy('deviceId', 'default'),
       selectedResolutionId: this.get('webrtc.resolutionList').findBy('presetId', 3)
-    }
+    };
   }),
 
   webrtc: inject.service(),
@@ -76,7 +76,7 @@ export default Component.extend(/* LoggerMixin, */{
       selectedCameraId: this.get('selectedProfile.selectedCamera.deviceId'),
       selectedMicrophoneId: this.get('selectedProfile.selectedMicrophone.deviceId'),
       selectedOutputDeviceId: this.get('selectedProfile.selectedOutputDevice.deviceId'),
-      selectedResolutionId: this.get('selectedProfile.selectedResolution.presetId'),
+      selectedResolutionId: this.get('selectedProfile.selectedResolution.presetId')
     });
   },
 
@@ -162,7 +162,7 @@ export default Component.extend(/* LoggerMixin, */{
       this.set('selectedProfileName', this.get('selectedProfile.name'));
 
       let profile = this.get('savedProfiles').findBy('name', this.get('selectedProfile.name'));
-      if (profile && profile.id != this.get('selectedProfile.id')) {
+      if (profile && profile.id !== this.get('selectedProfile.id')) {
         // TODO display warn
       }
       if (!profile && !this.get('savedProfiles').findBy('id', this.get('selectedProfile.id'))) {
