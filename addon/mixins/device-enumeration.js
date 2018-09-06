@@ -77,7 +77,7 @@ export default Mixin.create(Ember.Evented, {
     if (window.navigator && window.navigator.mediaDevices &&
         window.navigator.mediaDevices.constructor.prototype.hasOwnProperty('ondevicechange')) {
       $(window.navigator.mediaDevices).on('devicechange', () => {
-        Ember.Logger.debug('onDeviceChange fired');    
+        Ember.Logger.debug('onDeviceChange fired');
         Ember.run.debounce(this, this.enumerateDevices, true, 400);
       });
     }

@@ -35,6 +35,7 @@ install:
   - bower install
 
 script:
+  - npm test
   - ember try $EMBER_TRY_SCENARIO test
 
 after_script:
