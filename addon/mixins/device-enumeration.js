@@ -78,7 +78,7 @@ export default Mixin.create(Ember.Evented, {
         window.navigator.mediaDevices.constructor.prototype.hasOwnProperty('ondevicechange')) {
       $(window.navigator.mediaDevices).on('devicechange', () => {
         Ember.Logger.debug('onDeviceChange fired');
-        Ember.run.debounce(this, this.enumerateDevices, 400);
+        Ember.run.debounce(this, this.enumerateDevices, true, 400);
       });
     }
   },
@@ -162,7 +162,7 @@ export default Mixin.create(Ember.Evented, {
   },
 
   // Returns a promise which resolves when all devices have been enumerated and loaded
-  enumerateDevices () {
+  enumerateDevices (triggerListUpdatedEvent) {
     if (!window.navigator.mediaDevices || !window.navigator.mediaDevices.enumerateDevices) {
       return Ember.RSVP.reject();
     }
@@ -253,8 +253,9 @@ export default Mixin.create(Ember.Evented, {
         microphoneList: Ember.A(microphones),
         outputDeviceList: Ember.A(outputDevices)
       });
-
-      this.trigger('deviceListsUpdated');
+      if (triggerListUpdatedEvent) {
+        this.trigger('deviceListsUpdated');
+      }
     }).catch(err => {
       if (!this.get('isDestroyed') && !this.get('isDestroying')) {
         Ember.Logger.error(err);
